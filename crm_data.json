@@ -1,0 +1,277 @@
+{
+  "accounts": [
+    {
+      "company_name": "Databricks",
+      "company_domain": "databricks.com",
+      "industry": "Data and AI Platform",
+      "employee_count": 6000,
+      "annual_revenue": "1.6B ARR",
+      "key_contacts": [
+        {
+          "name": "Sarah Chen",
+          "role": "VP of Engineering",
+          "email": "s.chen@databricks.com",
+          "last_contacted": "2026-03-15",
+          "notes": "Primary champion. Strong advocate for consolidating data tooling. Responded well to ROI framing."
+        },
+        {
+          "name": "Marcus Powell",
+          "role": "Director of Data Infrastructure",
+          "email": "m.powell@databricks.com",
+          "last_contacted": "2026-02-28",
+          "notes": "Technical evaluator. Cares deeply about integration complexity and migration risk."
+        },
+        {
+          "name": "Linda Zhao",
+          "role": "CFO",
+          "email": "l.zhao@databricks.com",
+          "last_contacted": "2026-01-10",
+          "notes": "Economic buyer. Met once during business case review. Focused on cost reduction and vendor consolidation."
+        }
+      ],
+      "interaction_history": [
+        {
+          "date": "2026-03-15",
+          "type": "call",
+          "participants": ["Sarah Chen"],
+          "summary": "Reviewed Q1 usage data together. Sarah flagged that the team is hitting scale limits on their current setup. She asked about our enterprise tier pricing and multi-region support. Strong buying signal.",
+          "next_steps": "Send enterprise tier proposal by March 22. Loop in Marcus for technical deep dive."
+        },
+        {
+          "date": "2026-02-28",
+          "type": "technical review",
+          "participants": ["Marcus Powell"],
+          "summary": "Two hour technical session on integration architecture. Marcus raised concerns about migration complexity from their existing Spark setup. We walked through the migration playbook. He was satisfied with the approach but wants to see a reference customer in a similar setup.",
+          "next_steps": "Connect Marcus with reference customer at Snowflake. Share migration case study."
+        },
+        {
+          "date": "2026-02-10",
+          "type": "email",
+          "participants": ["Sarah Chen"],
+          "summary": "Sarah introduced us to Linda Zhao for the business case review. Positive signal that deal is moving upward.",
+          "next_steps": "Prepare executive summary for Linda."
+        },
+        {
+          "date": "2026-01-10",
+          "type": "call",
+          "participants": ["Linda Zhao", "Sarah Chen"],
+          "summary": "Business case review with CFO. Linda focused on total cost of ownership and timeline to value. Deal is in active evaluation. No red flags raised. Linda asked about contract flexibility for a phased rollout.",
+          "next_steps": "Draft phased rollout proposal. Address TCO questions in writing."
+        }
+      ],
+      "open_opportunities": [
+        {
+          "opportunity_name": "Databricks Enterprise Platform",
+          "stage": "Proposal",
+          "value": 480000,
+          "currency": "USD",
+          "close_date": "2026-06-30",
+          "notes": "Multi-year enterprise deal. Phased rollout preferred by CFO. Champion is strong. Technical evaluation complete."
+        }
+      ],
+      "relationship_status": "active",
+      "account_health": "strong",
+      "internal_flags": [
+        "Do not discuss competitor pricing unless directly asked",
+        "Marcus Powell is evaluating a competing solution from Cloudera - confirm status on next call",
+        "Contract must go through legal review minimum 3 weeks before close date"
+      ]
+    },
+    {
+      "company_name": "Figma",
+      "company_domain": "figma.com",
+      "industry": "Design and Collaboration Software",
+      "employee_count": 1400,
+      "annual_revenue": "600M ARR",
+      "key_contacts": [
+        {
+          "name": "James Okafor",
+          "role": "Head of Engineering",
+          "email": "j.okafor@figma.com",
+          "last_contacted": "2025-11-20",
+          "notes": "Initial champion. Went quiet after Adobe acquisition attempt fell through. Re-engagement needed."
+        },
+        {
+          "name": "Priya Nair",
+          "role": "Director of Product Operations",
+          "email": "p.nair@figma.com",
+          "last_contacted": "2025-10-05",
+          "notes": "Operational buyer. Interested in workflow automation use cases."
+        }
+      ],
+      "interaction_history": [
+        {
+          "date": "2025-11-20",
+          "type": "call",
+          "participants": ["James Okafor"],
+          "summary": "Follow up after Adobe deal collapse. James was distracted and non-committal. Said the team is in a holding pattern on new tooling decisions until internal restructuring settles. Asked us to follow up in Q1 2026.",
+          "next_steps": "Re-engage in January 2026 with updated positioning."
+        },
+        {
+          "date": "2025-10-05",
+          "type": "demo",
+          "participants": ["Priya Nair", "James Okafor"],
+          "summary": "Full product demo. Priya was highly engaged, particularly around the automation workflows. James was positive but mentioned budget constraints given uncertainty around the Adobe deal at the time.",
+          "next_steps": "Send follow up with workflow automation ROI calculator."
+        },
+        {
+          "date": "2025-09-15",
+          "type": "email",
+          "participants": ["James Okafor"],
+          "summary": "Inbound inquiry from James after seeing a LinkedIn post. Expressed interest in a demo.",
+          "next_steps": "Schedule demo."
+        }
+      ],
+      "open_opportunities": [
+        {
+          "opportunity_name": "Figma Workflow Automation",
+          "stage": "Nurture",
+          "value": 120000,
+          "currency": "USD",
+          "close_date": "2026-09-30",
+          "notes": "Stalled since November 2025. Re-engagement required. Internal restructuring was the blocker."
+        }
+      ],
+      "relationship_status": "dormant",
+      "account_health": "at-risk",
+      "internal_flags": [
+        "Account went cold after Adobe acquisition attempt collapsed in late 2025",
+        "Re-engagement window opened in Q1 2026 per James's request",
+        "Priya Nair may be a stronger champion than James given her enthusiasm in the demo"
+      ]
+    },
+    {
+      "company_name": "Stripe",
+      "company_domain": "stripe.com",
+      "industry": "Financial Infrastructure",
+      "employee_count": 8000,
+      "annual_revenue": "3.2B ARR",
+      "key_contacts": [
+        {
+          "name": "Elena Vasquez",
+          "role": "VP of Platform Engineering",
+          "email": "e.vasquez@stripe.com",
+          "last_contacted": "2026-04-01",
+          "notes": "Primary champion and technical decision maker. Very direct. Responds well to concrete technical depth over high-level pitches."
+        },
+        {
+          "name": "Tom Nguyen",
+          "role": "Senior Engineering Manager",
+          "email": "t.nguyen@stripe.com",
+          "last_contacted": "2026-03-20",
+          "notes": "Day-to-day evaluator. Running the technical POC. Strong relationship with our solutions engineer."
+        }
+      ],
+      "interaction_history": [
+        {
+          "date": "2026-04-01",
+          "type": "call",
+          "participants": ["Elena Vasquez"],
+          "summary": "Quarterly business review. Elena confirmed the POC results are strong and the team is satisfied with performance. She is preparing an internal recommendation for the procurement team. Timeline is Q2 close.",
+          "next_steps": "Send commercial proposal by April 10. Elena will present internally by April 20."
+        },
+        {
+          "date": "2026-03-20",
+          "type": "technical review",
+          "participants": ["Tom Nguyen"],
+          "summary": "POC review session. Tom walked through benchmark results. Performance exceeded targets on all key metrics. One open question on compliance certification for PCI DSS - flagged as a requirement.",
+          "next_steps": "Send PCI DSS compliance documentation. Schedule call with our compliance team if needed."
+        },
+        {
+          "date": "2026-02-15",
+          "type": "call",
+          "participants": ["Elena Vasquez", "Tom Nguyen"],
+          "summary": "POC kickoff. Agreed on success criteria and timeline. Four week POC with clear metrics defined.",
+          "next_steps": "Begin POC. Weekly check-ins with Tom."
+        },
+        {
+          "date": "2026-01-25",
+          "type": "meeting",
+          "participants": ["Elena Vasquez"],
+          "summary": "Initial discovery call. Elena outlined their infrastructure challenges at scale. Strong fit identified. Agreed to proceed to POC.",
+          "next_steps": "Prepare POC proposal."
+        }
+      ],
+      "open_opportunities": [
+        {
+          "opportunity_name": "Stripe Platform Infrastructure",
+          "stage": "Negotiation",
+          "value": 1200000,
+          "currency": "USD",
+          "close_date": "2026-06-15",
+          "notes": "High-priority deal. POC complete with strong results. Moving to procurement. PCI DSS compliance documentation is the remaining open item."
+        }
+      ],
+      "relationship_status": "active",
+      "account_health": "strong",
+      "internal_flags": [
+        "PCI DSS compliance documentation must be sent before commercial proposal is accepted",
+        "Elena Vasquez has a low tolerance for delays - respond to all communications within 24 hours",
+        "Deal size may increase if additional teams adopt post-initial contract"
+      ]
+    },
+    {
+      "company_name": "Notion",
+      "company_domain": "notion.so",
+      "industry": "Productivity and Knowledge Management",
+      "employee_count": 500,
+      "annual_revenue": "250M ARR",
+      "key_contacts": [
+        {
+          "name": "Alex Kim",
+          "role": "CTO",
+          "email": "a.kim@notion.so",
+          "last_contacted": "2026-03-05",
+          "notes": "Decision maker. Technically strong. Skeptical of enterprise tooling complexity. Prefers simple, well-documented solutions."
+        }
+      ],
+      "interaction_history": [
+        {
+          "date": "2026-03-05",
+          "type": "call",
+          "participants": ["Alex Kim"],
+          "summary": "First substantive call after two months of email nurture. Alex expressed genuine interest but raised concerns about implementation overhead for a team their size. He wants to see a lightweight deployment option before committing to an evaluation.",
+          "next_steps": "Send lightweight deployment documentation and a self-serve trial option if available."
+        },
+        {
+          "date": "2026-01-15",
+          "type": "email",
+          "participants": ["Alex Kim"],
+          "summary": "Cold outreach response. Alex acknowledged the email and said he would be open to a conversation in Q1.",
+          "next_steps": "Follow up in February to schedule call."
+        }
+      ],
+      "open_opportunities": [
+        {
+          "opportunity_name": "Notion Developer Platform",
+          "stage": "Discovery",
+          "value": 85000,
+          "currency": "USD",
+          "close_date": "2026-09-30",
+          "notes": "Early stage. CTO engaged but cautious. Lightweight deployment option is the key to moving forward."
+        }
+      ],
+      "relationship_status": "active",
+      "account_health": "developing",
+      "internal_flags": [
+        "Alex Kim values brevity - keep communications concise and technically precise",
+        "Do not lead with enterprise features - this account responds better to simplicity and developer experience"
+      ]
+    },
+    {
+      "company_name": "Acme Corp",
+      "company_domain": "acmecorp.com",
+      "industry": "Manufacturing",
+      "employee_count": 12000,
+      "annual_revenue": "4.5B",
+      "key_contacts": [],
+      "interaction_history": [],
+      "open_opportunities": [],
+      "relationship_status": "unknown",
+      "account_health": "unknown",
+      "internal_flags": [
+        "No prior contact. Use as a test case for net new account research."
+      ]
+    }
+  ]
+}

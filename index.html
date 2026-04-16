@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deal Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --surface-2: #1a1a1a;
+      --surface-3: #222222;
+      --border: #2a2a2a;
+      --border-active: #3a3a3a;
+      --text: #f0f0f0;
+      --text-2: #888888;
+      --text-3: #555555;
+      --accent: #e8ff47;
+      --accent-dim: rgba(232, 255, 71, 0.12);
+      --accent-dim-2: rgba(232, 255, 71, 0.06);
+      --green: #4dff91;
+      --green-dim: rgba(77, 255, 145, 0.1);
+      --red: #ff4d6a;
+      --red-dim: rgba(255, 77, 106, 0.1);
+      --orange: #ff9f4d;
+      --orange-dim: rgba(255, 159, 77, 0.1);
+      --blue: #4da6ff;
+      --blue-dim: rgba(77, 166, 255, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(232, 255, 71, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232, 255, 71, 0.015) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 96px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: 56px;
+      animation: fadeDown 0.6s ease both;
+    }
+
+    .header-tag {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-tag::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    h1 span {
+      color: var(--accent);
+    }
+
+    .header-sub {
+      font-size: 12px;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+    }
+
+    /* Form */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 32px;
+      margin-bottom: 32px;
+      animation: fadeUp 0.6s ease 0.1s both;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-2);
+    }
+
+    input, textarea {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      width: 100%;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--accent);
+      background: var(--surface-3);
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: var(--text-3);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px 24px;
+      background: var(--accent);
+      color: #0a0a0a;
+      border: none;
+      border-radius: 3px;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+
+    .submit-btn:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Pipeline status */
+    .pipeline-status {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 24px 32px;
+      margin-bottom: 32px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .pipeline-status.visible { display: block; }
+
+    .status-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .status-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-2);
+    }
+
+    .run-id {
+      font-size: 10px;
+      color: var(--text-3);
+      letter-spacing: 0.1em;
+    }
+
+    .stages {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .stages { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .stage {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 12px 14px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .stage.running {
+      border-color: var(--accent);
+      background: var(--accent-dim-2);
+    }
+
+    .stage.completed {
+      border-color: var(--green);
+      background: var(--green-dim);
+    }
+
+    .stage.failed {
+      border-color: var(--red);
+      background: var(--red-dim);
+    }
+
+    .stage-name {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 4px;
+    }
+
+    .stage.running .stage-name { color: var(--accent); }
+    .stage.completed .stage-name { color: var(--green); }
+    .stage.failed .stage-name { color: var(--red); }
+
+    .stage-status {
+      font-size: 11px;
+      color: var(--text-2);
+    }
+
+    /* Loading animation */
+    .loading-dots {
+      display: inline-flex;
+      gap: 3px;
+    }
+
+    .loading-dots span {
+      width: 4px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 1.2s ease infinite;
+    }
+
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    /* Brief output */
+    .brief-output {
+      display: none;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .brief-output.visible { display: block; }
+
+    .brief-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      gap: 16px;
+    }
+
+    .brief-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .brief-meta {
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 4px;
+    }
+
+    .confidence-badge {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 2px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .confidence-badge.high {
+      background: var(--green-dim);
+      color: var(--green);
+      border: 1px solid var(--green);
+    }
+
+    .confidence-badge.medium {
+      background: var(--orange-dim);
+      color: var(--orange);
+      border: 1px solid var(--orange);
+    }
+
+    .confidence-badge.low {
+      background: var(--red-dim);
+      color: var(--red);
+      border: 1px solid var(--red);
+    }
+
+    /* Brief sections */
+    .brief-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .brief-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .brief-section:hover {
+      border-color: var(--border-active);
+    }
+
+    .section-header {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .section-title {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .section-toggle {
+      font-size: 16px;
+      color: var(--text-3);
+      transition: transform 0.2s;
+    }
+
+    .brief-section.open .section-toggle {
+      transform: rotate(45deg);
+    }
+
+    .section-body {
+      display: none;
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .brief-section.open .section-body {
+      display: block;
+    }
+
+    .section-text {
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-2);
+      padding-top: 16px;
+    }
+
+    /* Talking points */
+    .talking-point {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--accent);
+      border-radius: 3px;
+      padding: 14px 16px;
+      margin-top: 10px;
+    }
+
+    .talking-point:first-child { margin-top: 16px; }
+
+    .tp-point {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .tp-meta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .tp-source {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+
+    .tp-source.research {
+      background: var(--blue-dim);
+      color: var(--blue);
+    }
+
+    .tp-source.crm {
+      background: var(--green-dim);
+      color: var(--green);
+    }
+
+    .tp-source.both {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    .tp-relevance {
+      font-size: 11px;
+      color: var(--text-3);
+      font-style: italic;
+    }
+
+    /* Internal flags */
+    .flag-item {
+      background: var(--red-dim);
+      border: 1px solid rgba(255, 77, 106, 0.2);
+      border-left: 2px solid var(--red);
+      border-radius: 3px;
+      padding: 10px 14px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .flag-item:first-child { margin-top: 16px; }
+
+    /* Confidence note */
+    .confidence-section {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .confidence-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .confidence-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+
+    .confidence-item::before {
+      content: '→';
+      color: var(--text-3);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .confidence-item.warning {
+      color: var(--orange);
+    }
+
+    .confidence-item.conflict {
+      color: var(--red);
+    }
+
+    /* Error state */
+    .error-card {
+      display: none;
+      background: var(--red-dim);
+      border: 1px solid rgba(255, 77, 106, 0.3);
+      border-radius: 4px;
+      padding: 24px 32px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .error-card.visible { display: block; }
+
+    .error-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 8px;
+    }
+
+    .error-message {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    /* Divider */
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 32px 0;
+    }
+
+    /* Animations */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-active); border-radius: 2px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="header">
+      <div class="header-tag">Multi-Agent Pipeline</div>
+      <h1>Deal<br /><span>Intelligence</span></h1>
+      <div class="header-sub">Research + CRM + Synthesis — before every call</div>
+    </header>
+
+    <!-- Input form -->
+    <div class="form-card">
+      <div class="form-row">
+        <div class="field">
+          <label for="company">Company Name</label>
+          <input
+            type="text"
+            id="company"
+            placeholder="e.g. Stripe, Databricks, Figma"
+            autocomplete="off"
+          />
+        </div>
+        <div class="field">
+          <label for="objective">Call Objective</label>
+          <input
+            type="text"
+            id="objective"
+            placeholder="e.g. Advance to proposal stage"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+      <button class="submit-btn" id="runBtn" onclick="runPipeline()">
+        Run Pipeline
+      </button>
+    </div>
+
+    <!-- Pipeline status -->
+    <div class="pipeline-status" id="pipelineStatus">
+      <div class="status-header">
+        <div class="status-label">Pipeline Running</div>
+        <div class="run-id" id="runIdDisplay"></div>
+      </div>
+      <div class="stages">
+        <div class="stage" id="stage-research">
+          <div class="stage-name">Research</div>
+          <div class="stage-status">Waiting</div>
+        </div>
+        <div class="stage" id="stage-crm">
+          <div class="stage-name">CRM</div>
+          <div class="stage-status">Waiting</div>
+        </div>
+        <div class="stage" id="stage-validation">
+          <div class="stage-name">Validation</div>
+          <div class="stage-status">Waiting</div>
+        </div>
+        <div class="stage" id="stage-synthesis">
+          <div class="stage-name">Synthesis</div>
+          <div class="stage-status">Waiting</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error card -->
+    <div class="error-card" id="errorCard">
+      <div class="error-label">Pipeline Failed</div>
+      <div class="error-message" id="errorMessage"></div>
+    </div>
+
+    <!-- Brief output -->
+    <div class="brief-output" id="briefOutput">
+      <div class="brief-header">
+        <div>
+          <div class="brief-title" id="briefTitle"></div>
+          <div class="brief-meta" id="briefMeta"></div>
+        </div>
+        <div class="confidence-badge" id="confidenceBadge"></div>
+      </div>
+      <div class="brief-sections" id="briefSections"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // Stage animation helpers
+    function setStage(stageId, state, statusText) {
+      const el = document.getElementById(`stage-${stageId}`);
+      if (!el) return;
+      el.className = `stage ${state}`;
+      el.querySelector('.stage-status').textContent = statusText;
+    }
+
+    function animateParallelStages() {
+      setStage('research', 'running', 'Running...');
+      setStage('crm', 'running', 'Running...');
+    }
+
+    function animateValidationStage() {
+      setStage('research', 'completed', 'Done');
+      setStage('crm', 'completed', 'Done');
+      setStage('validation', 'running', 'Running...');
+    }
+
+    function animateSynthesisStage() {
+      setStage('validation', 'completed', 'Passed');
+      setStage('synthesis', 'running', 'Running...');
+    }
+
+    function completeAllStages() {
+      setStage('synthesis', 'completed', 'Done');
+    }
+
+    function failStage(stageId, reason) {
+      setStage(stageId, 'failed', reason || 'Failed');
+    }
+
+    // Render the brief sections
+    function renderBrief(brief, trace) {
+      const sections = document.getElementById('briefSections');
+      sections.innerHTML = '';
+
+      // Title and meta
+      document.getElementById('briefTitle').textContent = brief.company_name;
+      document.getElementById('briefMeta').textContent =
+        `Run ${brief.run_id} · ${new Date().toLocaleString()}`;
+
+      // Confidence badge
+      const confidence = (brief.confidence_note?.overall_confidence || 'medium').toLowerCase();
+      const badge = document.getElementById('confidenceBadge');
+      badge.textContent = `${confidence} confidence`;
+      badge.className = `confidence-badge ${confidence}`;
+
+      // Define sections to render in order
+      const sectionDefs = [
+        {
+          id: 'snapshot',
+          title: 'Account Snapshot',
+          render: () => `<p class="section-text">${brief.account_snapshot || 'No data available.'}</p>`
+        },
+        {
+          id: 'relationship',
+          title: 'Relationship Status',
+          render: () => `<p class="section-text">${brief.relationship_status || 'No CRM data available.'}</p>`
+        },
+        {
+          id: 'talking',
+          title: 'Talking Points',
+          render: () => {
+            if (!brief.talking_points?.length) return '<p class="section-text">No talking points generated.</p>';
+            return brief.talking_points.map(tp => `
+              <div class="talking-point">
+                <div class="tp-point">${tp.point}</div>
+                <div class="tp-meta">
+                  <span class="tp-source ${tp.source || 'both'}">${tp.source || 'both'}</span>
+                  ${tp.relevance ? `<span class="tp-relevance">${tp.relevance}</span>` : ''}
+                </div>
+              </div>
+            `).join('');
+          }
+        },
+        {
+          id: 'approach',
+          title: 'Recommended Approach',
+          render: () => `<p class="section-text">${brief.recommended_approach || 'No recommendation generated.'}</p>`
+        },
+        {
+          id: 'flags',
+          title: 'Internal Flags',
+          render: () => {
+            const flags = brief.internal_flags;
+            if (!flags?.length) return '<p class="section-text" style="color: var(--text-3)">No internal flags.</p>';
+            return flags.map(f => `<div class="flag-item">${f}</div>`).join('');
+          }
+        },
+        {
+          id: 'confidence',
+          title: 'Confidence Note',
+          render: () => {
+            const cn = brief.confidence_note || {};
+            const items = [];
+
+            (cn.gaps || []).forEach(g => items.push({ text: g, type: '' }));
+            (cn.warnings || []).forEach(w => items.push({ text: w, type: 'warning' }));
+            (cn.conflicts_flagged || []).forEach(c => items.push({ text: c, type: 'conflict' }));
+
+            if (cn.prior_brief_note) items.push({ text: cn.prior_brief_note, type: 'warning' });
+
+            if (!items.length) return '<p class="section-text" style="color: var(--text-3)">No gaps or conflicts identified.</p>';
+
+            return `<div class="confidence-section"><div class="confidence-row">
+              ${items.map(i => `<div class="confidence-item ${i.type}">${i.text}</div>`).join('')}
+            </div></div>`;
+          }
+        }
+      ];
+
+      sectionDefs.forEach((def, i) => {
+        const section = document.createElement('div');
+        section.className = `brief-section ${i < 2 ? 'open' : ''}`;
+        section.innerHTML = `
+          <div class="section-header" onclick="toggleSection(this.parentElement)">
+            <div class="section-title">
+              <span class="section-dot"></span>
+              ${def.title}
+            </div>
+            <span class="section-toggle">+</span>
+          </div>
+          <div class="section-body">${def.render()}</div>
+        `;
+        sections.appendChild(section);
+      });
+    }
+
+    function toggleSection(el) {
+      el.classList.toggle('open');
+    }
+
+    // Main pipeline runner
+    async function runPipeline() {
+      const company = document.getElementById('company').value.trim();
+      const objective = document.getElementById('objective').value.trim();
+
+      if (!company || !objective) {
+        alert('Please enter both a company name and call objective.');
+        return;
+      }
+
+      // Reset UI
+      document.getElementById('briefOutput').classList.remove('visible');
+      document.getElementById('errorCard').classList.remove('visible');
+      document.getElementById('pipelineStatus').classList.add('visible');
+      document.getElementById('runBtn').disabled = true;
+
+      ['research', 'crm', 'validation', 'synthesis'].forEach(s =>
+        setStage(s, '', 'Waiting')
+      );
+
+      // Animate parallel stage start
+      setTimeout(() => animateParallelStages(), 300);
+      setTimeout(() => animateValidationStage(), 2500);
+      setTimeout(() => animateSynthesisStage(), 4500);
+
+      try {
+        const response = await fetch('/api/pipeline', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            company_name: company,
+            call_objective: objective
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || 'Pipeline request failed');
+        }
+
+        // Update run ID display
+        document.getElementById('runIdDisplay').textContent = `Run ${data.run_id}`;
+
+        if (data.status === 'failed') {
+          // Show failure state
+          const trace = data.pipeline_trace?.stages || {};
+          if (trace.validation?.status === 'fail') {
+            failStage('validation', 'Failed');
+            setStage('synthesis', 'failed', 'Skipped');
+          } else {
+            failStage('synthesis', 'Failed');
+          }
+
+          document.getElementById('errorMessage').textContent = data.error || 'An unknown error occurred.';
+          document.getElementById('errorCard').classList.add('visible');
+
+        } else {
+          // Show success state
+          completeAllStages();
+
+          // Update stage details from trace
+          const trace = data.pipeline_trace?.stages || {};
+          if (trace.research?.confidence) {
+            setStage('research', 'completed', trace.research.confidence);
+          }
+          if (trace.crm?.relationship_status) {
+            setStage('crm', 'completed', trace.crm.relationship_status);
+          }
+
+          // Render the brief
+          renderBrief(data.brief, data.pipeline_trace);
+          document.getElementById('briefOutput').classList.add('visible');
+        }
+
+      } catch (err) {
+        ['research', 'crm', 'validation', 'synthesis'].forEach(s =>
+          failStage(s, 'Error')
+        );
+        document.getElementById('errorMessage').textContent = err.message;
+        document.getElementById('errorCard').classList.add('visible');
+      } finally {
+        document.getElementById('runBtn').disabled = false;
+      }
+    }
+
+    // Allow Enter key to submit
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !document.getElementById('runBtn').disabled) {
+        runPipeline();
+      }
+    });
+  </script>
+</body>
+</html>
