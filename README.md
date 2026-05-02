@@ -143,7 +143,6 @@ The project includes five sample accounts in `data/crm_data.json` covering the f
 | Databricks | Active | Proposal | Testing multi-stakeholder deal |
 | Figma | Dormant | Nurture | Testing re-engagement scenario |
 | Notion | Active | Discovery | Testing early-stage cautious buyer |
-| Acme Corp | Unknown | None | Testing net new account research |
 
 To add your own accounts, follow the schema in `crm_data.json`.
 
